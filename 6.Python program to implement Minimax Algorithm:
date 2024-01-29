@@ -1,0 +1,76 @@
+def evaluate(board):
+    # Function to evaluate the current state of the board
+    # and return a score (1: player wins, -1: opponent wins, 0: draw)
+    for row in board:
+        if all(cell == 'X' for cell in row):
+            return 1
+        elif all(cell == 'O' for cell in row):
+            return -1
+
+    for col in range(3):
+        if all(board[row][col] == 'X' for row in range(3)):
+            return 1
+        elif all(board[row][col] == 'O' for row in range(3)):
+            return -1
+
+    if all(board[i][i] == 'X' for i in range(3)) or all(board[i][2 - i] == 'X' for i in range(3)):
+        return 1
+    elif all(board[i][i] == 'O' for i in range(3)) or all(board[i][2 - i] == 'O' for i in range(3)):
+        return -1
+
+    return 0  # No winner
+
+def game_over(board):
+    # Check if the game is over (someone has won or it's a draw)
+    return any(cell == ' ' for row in board for cell in row)
+
+def available_moves(board):
+    # Return a list of available moves on the board
+    return [(i, j) for i in range(3) for j in range(3) if board[i][j] == ' ']
+
+def make_move(board, move, maximizing_player):
+    # Make a move on the board and return the new state
+    new_board = [row.copy() for row in board]
+    player = 'X' if maximizing_player else 'O'
+    new_board[move[0]][move[1]] = player
+    return new_board
+
+def minimax(board, depth, maximizing_player):
+    if depth == 0 or game_over(board):
+        return evaluate(board)
+
+    if maximizing_player:
+        max_eval = float('-inf')
+        for move in available_moves(board):
+            new_board = make_move(board, move, maximizing_player)
+            eval = minimax(new_board, depth - 1, False)
+            max_eval = max(max_eval, eval)
+        return max_eval
+    else:
+        min_eval = float('inf')
+        for move in available_moves(board):
+            new_board = make_move(board, move, maximizing_player)
+            eval = minimax(new_board, depth - 1, True)
+            min_eval = min(min_eval, eval)
+        return min_eval
+
+# Example usage:
+initial_board = [['X', 'O', 'X'],
+                 ['O', 'X', 'O'],
+                 [' ', ' ', 'X']]
+
+depth = 3
+maximizing_player = True
+
+best_move = None
+best_value = float('-inf')
+
+for move in available_moves(initial_board):
+    new_board = make_move(initial_board, move, maximizing_player)
+    value = minimax(new_board, depth - 1, False)
+
+    if value > best_value:
+        best_value = value
+        best_move = move
+
+print(f"Best Move: {best_move}, Best Value: {best_value}")
