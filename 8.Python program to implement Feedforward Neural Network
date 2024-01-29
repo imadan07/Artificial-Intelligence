@@ -1,0 +1,20 @@
+import numpy as np
+from sklearn.neural_network import MLPClassifier
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Load the digits dataset
+digits = load_digits()
+X_train, X_test, y_train, y_test = train_test_split(digits.data, digits.target, test_size=0.2, random_state=42)
+
+# Create Feedforward Neural Network model
+mlp_classifier = MLPClassifier(hidden_layer_sizes=(100,), max_iter=500)
+mlp_classifier.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = mlp_classifier.predict(X_test)
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)*100
+print(f"Neural Network Accuracy: {accuracy}")
