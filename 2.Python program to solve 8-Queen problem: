@@ -1,0 +1,30 @@
+def is_safe(board, row, col):
+    for i in range(row):
+        if board[i] == col or \
+           board[i] - i == col - row or \
+           board[i] + i == col + row:
+            return False
+    return True
+
+def solve_8_queens_util(board, row):
+    n = len(board)
+    if row == n:
+        return [board[:]]  # Found a solution, make a copy and return
+
+    solutions = []
+    for col in range(n):
+        if is_safe(board, row, col):
+            board[row] = col
+            solutions += solve_8_queens_util(board, row + 1)
+
+    return solutions
+
+def solve_8_queens():
+    board = [-1] * 8
+    return solve_8_queens_util(board, 0)
+
+# Example usage:
+solutions = solve_8_queens()
+print("Number of solutions:", len(solutions))
+for solution in solutions:
+    print(solution)
