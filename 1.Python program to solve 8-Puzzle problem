@@ -1,0 +1,39 @@
+from queue import Queue
+def is_valid_move(board, move):
+    return 0 <= move[0] < 3 and 0 <= move[1] < 3
+def generate_moves(board):
+    zero_position = [(i, row.index(0)) for i, row in enumerate(board) if 0 in row][0]
+    moves = [(zero_position[0] + i, zero_position[1] + j) for i, j in [(0, 1), (1, 0), (0, -1), (-1, 0)]]
+    return [move for move in moves if is_valid_move(board, move)]
+def apply_move(board, move):
+    new_board = [row.copy() for row in board]
+    zero_position = [(i, row.index(0)) for i, row in enumerate(board) if 0 in row][0]
+    new_board[zero_position[0]][zero_position[1]], new_board[move[0]][move[1]] = new_board[move[0]][move[1]], new_board[zero_position[0]][zero_position[1]]
+    return new_board
+def print_board(board):
+    for row in board:
+        print(row)
+    print()
+def solve_8_puzzle(initial_board):
+    goal_state = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+    visited = set()
+    queue = Queue()
+    queue.put((initial_board, []))
+    while not queue.empty():
+        current_board, path = queue.get()
+        if current_board == goal_state:
+            return path
+        visited.add(tuple(map(tuple, current_board)))
+        for move in generate_moves(current_board):
+            new_board = apply_move(current_board, move)
+            if tuple(map(tuple, new_board)) not in visited:
+                queue.put((new_board, path + [move]))
+    return None
+initial_board = [[1, 2, 3], [4, 5, 6], [0, 7, 8]]
+solution = solve_8_puzzle(initial_board)
+if solution:
+    print("Solution found:")
+    for move in solution:
+        print(move)
+else:
+    print("No solution found.")
