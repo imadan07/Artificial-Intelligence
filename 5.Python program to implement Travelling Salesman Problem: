@@ -1,0 +1,33 @@
+from itertools import permutations
+
+def traveling_salesman(graph, start):
+    all_cities = list(graph.keys())
+    all_permutations = permutations(all_cities[1:])  # Exclude the starting city
+
+    min_distance = float('inf')
+    optimal_path = None
+
+    for path in all_permutations:
+        path = (start,) + path + (start,)  # Ensure the path starts and ends at the specified city
+        path_distance = 0
+
+        for i in range(len(path) - 1):
+            path_distance += graph[path[i]][path[i+1]]
+
+        if path_distance < min_distance:
+            min_distance = path_distance
+            optimal_path = path
+
+    return optimal_path, min_distance
+
+# Example usage:
+graph = {
+    'A': {'B': 2, 'C': 4, 'D': 1},
+    'B': {'A': 2, 'C': 5, 'D': 2},
+    'C': {'A': 4, 'B': 5, 'D': 1},
+    'D': {'A': 1, 'B': 2, 'C': 1}
+}
+
+start_city = 'A'
+optimal_path, min_distance = traveling_salesman(graph, start_city)
+print(f"Optimal Path: {optimal_path}, Minimum Distance: {min_distance}")
