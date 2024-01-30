@@ -1,0 +1,18 @@
+% Example rules for medical diagnosis
+symptom(john, fever).
+symptom(john, cough).
+symptom(sara, headache).
+symptom(bob, sore_throat).
+
+diagnosis(Person, cold) :-
+    symptom(Person, fever),
+    symptom(Person, cough).
+
+diagnosis(Person, flu) :-
+    symptom(Person, fever),
+    symptom(Person, headache).
+
+diagnosis(Person, strep_throat) :-
+    symptom(Person, sore_throat).
+
+% You can extend the rules based on more symptoms and conditions.
