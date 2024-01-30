@@ -1,0 +1,16 @@
+% Facts
+parent(john, jim).
+parent(john, sara).
+parent(jim, ann).
+parent(jim, bob).
+
+% Rules
+father(X, Y) :- parent(X, Y), male(X).
+mother(X, Y) :- parent(X, Y), female(X).
+
+% Define gender
+male(john).
+male(jim).
+female(sara).
+female(ann).
+female(bob).
