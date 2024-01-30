@@ -1,0 +1,13 @@
+% a. Printing all elements of a list
+print_list([]).
+print_list([Head|Tail]) :-
+    write(Head), nl,
+    print_list(Tail).
+
+% b. To append an integer into the list
+append_element(List, Element, Result) :-
+    append(List, [Element], Result).
+
+% c. List Membership
+is_member(Element, List) :-
+    member(Element, List).
